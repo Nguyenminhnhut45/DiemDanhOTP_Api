@@ -23,16 +23,23 @@ namespace DiemDanhOTP.Controllers
 
         public IEnumerable<GroupSubject> Get()
         {
-            return _context.GroupSubjects.Include(x => x.IdcourseNavigation).Include(x => x.IdteacherNavigation);
+            return _context.GroupSubjects.Include(x => x.IdcourseNavigation).Include(y => y.IdteacherNavigation);
         }
 
         // GET api/<GroupSubjectsController>/5
         [HttpGet("{id}")]
         public GroupSubject Get(int id)
         {
-            return _context.GroupSubjects.SingleOrDefault(x => x.Idgroup == id);
+            return _context.GroupSubjects.Include(x => x.IdcourseNavigation).Include(x => x.IdteacherNavigation).SingleOrDefault(x => x.Idgroup == id);
         }
 
+        [HttpGet("/api/Group/{idteacher}")]
+        public IEnumerable<GroupSubject> GetByIdTeacher(int idteacher)
+        {
+            var logs = from GroupSubject in _context.GroupSubjects.Include(x => x.IdcourseNavigation) select GroupSubject;
+            logs = logs.Where(p => p.Idteacher == idteacher);
+            return logs;
+        }
         // POST api/<GroupSubjectsController>
         [HttpPost]
         public void Post([FromBody] GroupSubject groupSubject)

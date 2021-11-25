@@ -10,7 +10,6 @@ namespace DiemDanhOTP.Models
         public GroupSubject()
         {
             Sessions = new HashSet<Session>();
-            Studies = new HashSet<Study>();
         }
 
         public int Idgroup { get; set; }
@@ -25,6 +24,5 @@ namespace DiemDanhOTP.Models
         public virtual Course IdcourseNavigation { get; set; }
         public virtual Teacher IdteacherNavigation { get; set; }
         public virtual ICollection<Session> Sessions { get; set; }
-        public virtual ICollection<Study> Studies { get; set; }
     }
 }

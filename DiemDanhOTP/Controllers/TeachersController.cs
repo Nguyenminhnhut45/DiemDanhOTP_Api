@@ -20,11 +20,13 @@ namespace DiemDanhOTP.Controllers
             _context = context;
         }
 
+
+
         // GET: api/<TeachersController>
         [HttpGet]
         public IEnumerable<Teacher> Get()
         {
-            return _context.Teachers.Include(x => x.IdNavigation);
+            return _context.Teachers;
         }
 
         // GET api/<TeachersController>/5
@@ -49,7 +51,7 @@ namespace DiemDanhOTP.Controllers
                 _context.SaveChanges();
             }
         }
- 
+
         // PUT api/<TeachersController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] Teacher teacher)

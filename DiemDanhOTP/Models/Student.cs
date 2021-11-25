@@ -10,7 +10,6 @@ namespace DiemDanhOTP.Models
         public Student()
         {
             SessionDetails = new HashSet<SessionDetail>();
-            Studies = new HashSet<Study>();
         }
 
         public string Idstudent { get; set; }
@@ -24,6 +23,5 @@ namespace DiemDanhOTP.Models
 
         public virtual User IdNavigation { get; set; }
         public virtual ICollection<SessionDetail> SessionDetails { get; set; }
-        public virtual ICollection<Study> Studies { get; set; }
     }
 }

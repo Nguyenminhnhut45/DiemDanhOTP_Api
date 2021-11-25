@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,28 +26,41 @@ namespace DiemDanhOTP.Controllers
         }
 
         // GET api/<SessionDetailsController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+
+        //GET api
+        [HttpGet("{idstudent}/{idsession}")]
+        public SessionDetail GetByIdStudentIdSession(string idstudent, int idsession)
         {
-            return "value";
+            return _context.SessionDetails.SingleOrDefault(x => x.Idlession == idsession && x.Idstuddent == idstudent);
         }
 
         // POST api/<SessionDetailsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] SessionDetail sessiondetail)
         {
+            _context.SessionDetails.Add(sessiondetail);
+            _context.SaveChanges();
         }
 
         // PUT api/<SessionDetailsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("{idstudent}")]
+        public void Put(string idstudent, [FromBody] SessionDetail sessionDetail)
         {
+            sessionDetail.Idstuddent = idstudent;
+            _context.SessionDetails.Update(sessionDetail);
+            _context.SaveChanges();
         }
 
         // DELETE api/<SessionDetailsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{idstudent}")]
+        public void Delete(string idstudent)
         {
+            var item = _context.SessionDetails.FirstOrDefault(x => x.Idstuddent == idstudent);
+            if (item != null)
+            {
+                _context.SessionDetails.Remove(item);
+                _context.SaveChanges();
+            }
         }
     }
 }
