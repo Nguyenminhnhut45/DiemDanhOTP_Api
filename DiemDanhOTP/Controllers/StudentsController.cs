@@ -36,7 +36,7 @@ namespace DiemDanhOTP.Controllers
         [HttpPost]
         public void Post([FromBody] Student student)
         {
-            var students = _context.Users.SingleOrDefault(x=> x.Id==student.Id);
+            var students = _context.Users.SingleOrDefault(x => x.Id == student.Id);
             if (students == null)
             {
                 Ok(NotFound());
@@ -46,7 +46,7 @@ namespace DiemDanhOTP.Controllers
                 _context.Students.Add(student);
                 _context.SaveChanges();
             }
-           
+
         }
 
         // PUT api/<StudentsController>/5

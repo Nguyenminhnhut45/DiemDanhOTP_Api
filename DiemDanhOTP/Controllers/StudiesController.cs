@@ -28,13 +28,24 @@ namespace DiemDanhOTP.Controllers
         [HttpGet("{mssv}")]
         public Study GetByMssv(string mssv)
         {
-           return _context.Studies.Include(x=>x.IdstudentNavigation).SingleOrDefault(x=> x.Idstudent==mssv);
+            return _context.Studies.Include(x => x.IdstudentNavigation).SingleOrDefault(x => x.Idstudent == mssv);
         }
-       /* [HttpGet("{groupsubject}")]
-        public Study GetByGroup(int group)
+        //Get theo nhoms mon hoc
+        [HttpGet("/api/Studies/Group/{idgroup}")]
+        public IEnumerable<Study> GetByGroup(int idgroup)
         {
-            return _context.Studies.Include(x => x.IdstudentNavigation).SingleOrDefault(x => x.Idgroup == group);
-        }*/
+            var logs = from Study in _context.Studies.Include(x => x.IdgroupNavigation) select Study;
+            logs = logs.Where(p => p.Idgroup == idgroup);
+            return logs;
+        }
+        //Get theo sinh vien
+        [HttpGet("/api/Studies/Student/{idStudent}")]
+        public IEnumerable<Study> GetByStudent(string idStudent)
+        {
+            var logs = from Study in _context.Studies.Include(x => x.IdgroupNavigation) select Study;
+            logs = logs.Where(p => p.Idstudent == idStudent);
+            return logs;
+        }
 
         // POST api/<StudysController>
         [HttpPost]

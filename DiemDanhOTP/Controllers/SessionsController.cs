@@ -22,9 +22,9 @@ namespace DiemDanhOTP.Controllers
         [HttpGet]
         public IEnumerable<Session> Get()
         {
-           
-           return _context.Sessions.Include(x => x.IdgroupNavigation);
-           
+
+            return _context.Sessions.Include(x => x.IdgroupNavigation);
+
         }
 
         // GET api/<SessionsController>/5
@@ -36,13 +36,21 @@ namespace DiemDanhOTP.Controllers
         }
 
         //Get api by groupsubject 
-        [HttpGet("/Session/group/{group}")]
-        public IEnumerable<Session> GetByIdGroup(int group)
+        [HttpGet("/api/Sessions/idGroup/{idgroup}")]
+        public IEnumerable<Session> GetByIdGroup(int idgroup)
         {
-            var logs = from Session in _context.Sessions select Session;
-            logs = logs.Where(p => p.Idgroup == group);
+            var logs = from Session in _context.Sessions.Include(x => x.IdgroupNavigation) select Session;
+            logs = logs.Where(p => p.Idgroup == idgroup);
             return logs;
         }
+        [HttpGet("/api/Session/Date/{date}")]
+        public IEnumerable<Session> GetByDate(string date)
+        {
+            var logs = from Session in _context.Sessions.Include(x => x.IdgroupNavigation) select Session;
+            logs = logs.Where(p => p.Date.ToString() == date);
+            return logs;
+        }
+
         //get by teacher
 
         // POST api/<SessionsController>
@@ -71,6 +79,7 @@ namespace DiemDanhOTP.Controllers
             if (session != null)
             {
                 _context.Sessions.Remove(session);
+                _context.SaveChanges();
             }
         }
     }

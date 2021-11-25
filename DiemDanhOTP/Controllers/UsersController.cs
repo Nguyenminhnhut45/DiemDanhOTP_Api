@@ -24,7 +24,7 @@ namespace DiemDanhOTP.Controllers
         [HttpGet]
         public IEnumerable<User> Get()
         {
-            return _context.Users;
+            return _context.Users.ToList();
         }
 
         // GET api/<UsersController>/5
@@ -65,6 +65,7 @@ namespace DiemDanhOTP.Controllers
                 _context.Users.Remove(item);
                 _context.SaveChanges();
             }
+
         }
     }
 }

@@ -213,31 +213,28 @@ namespace DiemDanhOTP.Models
 
             modelBuilder.Entity<Study>(entity =>
             {
-                entity.HasKey(e => new { e.Idgroup, e.Idstudent, e.Id });
+                entity.HasNoKey();
 
                 entity.ToTable("Study");
 
                 entity.Property(e => e.Idgroup).HasColumnName("IDGroup");
 
                 entity.Property(e => e.Idstudent)
+                    .IsRequired()
                     .HasMaxLength(10)
                     .IsUnicode(false)
                     .HasColumnName("IDStudent");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("ID");
-
                 entity.Property(e => e.Stt).HasColumnName("STT");
 
                 entity.HasOne(d => d.IdgroupNavigation)
-                    .WithMany(p => p.Studies)
+                    .WithMany()
                     .HasForeignKey(d => d.Idgroup)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Relationship13");
 
                 entity.HasOne(d => d.IdstudentNavigation)
-                    .WithMany(p => p.Studies)
+                    .WithMany()
                     .HasForeignKey(d => d.Idstudent)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Relationship14");
@@ -273,8 +270,6 @@ namespace DiemDanhOTP.Models
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.ToTable("User");
-
                 entity.HasIndex(e => e.Idadmin, "IX_Relationship25");
 
                 entity.Property(e => e.Id).HasColumnName("ID");
