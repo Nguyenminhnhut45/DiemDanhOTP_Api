@@ -83,8 +83,8 @@ namespace DiemDanhOTP.Models
 
                 entity.Property(e => e.Idgroup).HasColumnName("IDGroup");
 
-                entity.Property(e => e.Class)
-                    .HasMaxLength(10)
+                entity.Property(e => e.ClassGroup)
+                    .HasMaxLength(20)
                     .IsUnicode(false);
 
                 entity.Property(e => e.DateEnd).HasColumnType("date");
@@ -97,6 +97,10 @@ namespace DiemDanhOTP.Models
                     .HasColumnName("IDCourse");
 
                 entity.Property(e => e.Idteacher).HasColumnName("IDTeacher");
+
+                entity.Property(e => e.Linkaddsr).IsUnicode(false);
+
+                entity.Property(e => e.Linkds).IsUnicode(false);
 
                 entity.HasOne(d => d.IdcourseNavigation)
                     .WithMany(p => p.GroupSubjects)
@@ -156,7 +160,6 @@ namespace DiemDanhOTP.Models
                     .HasColumnName("OTP");
 
                 entity.Property(e => e.Status)
-                    .IsRequired()
                     .HasMaxLength(1)
                     .IsUnicode(false)
                     .IsFixedLength(true);
@@ -249,6 +252,8 @@ namespace DiemDanhOTP.Models
                 entity.Property(e => e.Idteacher).HasColumnName("IDTeacher");
 
                 entity.Property(e => e.Birthday).HasColumnType("date");
+
+                entity.Property(e => e.Gmail).IsUnicode(false);
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 

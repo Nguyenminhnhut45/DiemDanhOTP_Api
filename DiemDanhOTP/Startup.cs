@@ -29,6 +29,7 @@ namespace DiemDanhOTP
         public void ConfigureServices(IServiceCollection services)
         {
 
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -43,11 +44,19 @@ namespace DiemDanhOTP
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DiemDanhOTP v1");
+               c.RoutePrefix = string.Empty;
+            });
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DiemDanhOTP v1"));
+
             }
 
             app.UseHttpsRedirection();
@@ -60,6 +69,15 @@ namespace DiemDanhOTP
             {
                 endpoints.MapControllers();
             });
+
+            /*app.UseEndpoints(area =>
+            {
+                area.MapControllerRoute(
+                  name: "areas",
+                  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+            });*/
+
         }
     }
 }

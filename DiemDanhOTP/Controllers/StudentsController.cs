@@ -32,6 +32,12 @@ namespace DiemDanhOTP.Controllers
             return _context.Students.SingleOrDefault(x => x.Idstudent == id);
         }
 
+        [HttpGet("/api/Student/{idUser}")]
+        public Student Get(int idUser)
+        {
+            return _context.Students.SingleOrDefault(x => x.Id == idUser);
+        }
+
         // POST api/<StudentsController>
         [HttpPost]
         public void Post([FromBody] Student student)

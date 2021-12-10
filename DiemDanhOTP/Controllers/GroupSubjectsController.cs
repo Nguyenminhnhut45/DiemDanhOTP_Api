@@ -23,7 +23,7 @@ namespace DiemDanhOTP.Controllers
 
         public IEnumerable<GroupSubject> Get()
         {
-            return _context.GroupSubjects.Include(x => x.IdcourseNavigation).Include(y => y.IdteacherNavigation);
+            return _context.GroupSubjects.Include(x => x.IdcourseNavigation);
         }
 
         // GET api/<GroupSubjectsController>/5

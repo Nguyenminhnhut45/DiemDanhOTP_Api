@@ -18,6 +18,7 @@ namespace DiemDanhOTP.Controllers
             _context = context;
         }
         // GET: api/<StudysController>
+        //?????
         [HttpGet]
         public IEnumerable<Study> Get()
         {
@@ -70,5 +71,10 @@ namespace DiemDanhOTP.Controllers
         {
 
         }
+
+
+
+
+
     }
 }

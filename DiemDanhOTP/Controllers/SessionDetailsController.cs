@@ -1,6 +1,7 @@
 ﻿using DiemDanhOTP.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -34,6 +35,16 @@ namespace DiemDanhOTP.Controllers
             return _context.SessionDetails.SingleOrDefault(x => x.Idlession == idsession && x.Idstuddent == idstudent);
         }
 
+        [HttpGet("{idsession}")]
+        public IEnumerable<SessionDetail> GetByIdIdSession(int idsession)
+        {
+            var logs = from SessionDetail in _context.SessionDetails
+                       select SessionDetail;
+            logs = logs.Where(p => p.Idlession == idsession);
+            return logs;
+        }
+
+
         // POST api/<SessionDetailsController>
         [HttpPost]
         public void Post([FromBody] SessionDetail sessiondetail)
@@ -41,6 +52,73 @@ namespace DiemDanhOTP.Controllers
             _context.SessionDetails.Add(sessiondetail);
             _context.SaveChanges();
         }
+        //
+        [HttpPut("/api/SessionDetail/{idSession}/{idStudent}")]
+        public void Put(int idSession, string idStudent, [FromBody] SessionDetail sessionDetail)
+        {
+
+            var n = _context.SessionDetails.FirstOrDefault(x => x.Idstuddent == idStudent && x.Idlession == idSession);
+            if (n != null)
+            {
+                /*  sessionDetail.Idstuddent = idStudent;
+                  sessionDetail.Idlession = idSession;
+                  _context.Update(sessionDetail);
+                  _context.SaveChanges();*/
+
+                /*   string dateTimeClient = n.Time.ToString();
+                   string dateTimeServer = sessionDetail.Time.ToString();
+                   if (sessionDetail.Otp == n.Otp && CompareTime(dateTimeClient, dateTimeServer) == true)
+                   {*/
+                n.Idlession = idSession;
+                n.Otp = sessionDetail.Otp;
+                n.Idstuddent = idStudent;
+                n.Status = sessionDetail.Status;
+                n.Note = sessionDetail.Note;
+                n.Time = DateTime.UtcNow.AddHours(7);
+                _context.Update(n);
+                _context.SaveChanges();
+                /*}
+                else if (sessionDetail.Otp == n.Otp)
+                {
+                    n.Idlession = idSession;
+                    n.Otp = sessionDetail.Otp;
+                    n.Idstuddent = idStudent;
+                    n.Status = "0";
+                    n.Note = "Sinh viên điểm danh ngoài thời gian quy định";
+                    n.Time = DateTime.Now;
+                    _context.Update(n);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    n.Idlession = idSession;
+                    n.Otp = sessionDetail.Otp;
+                    n.Idstuddent = idStudent;
+                    n.Status = "0";
+                    n.Note = "Sinh viên điểm danh thất bại do nhập sai mã OTP";
+                    n.Time = DateTime.Now;
+                    _context.Update(n);
+                    _context.SaveChanges();
+                }*/
+
+            }
+
+
+        }
+        bool CompareTime(string dateTimeClient, string dateTimeServer)
+        {
+            DateTime s1 = DateTime.Parse(dateTimeClient);
+            DateTime s2 = DateTime.Parse(dateTimeServer);
+
+            TimeSpan timeSpan = s1.Subtract(s2);
+            if (timeSpan.Seconds < 60)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
 
         // PUT api/<SessionDetailsController>/5
         [HttpPut("{idstudent}")]

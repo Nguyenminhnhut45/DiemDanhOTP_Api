@@ -18,6 +18,8 @@ namespace DiemDanhOTP.Models
         public DateTime? Birthday { get; set; }
         public int? Id { get; set; }
         public string SourceTeacher { get; set; }
+        public string Gmail { get; set; }
+        public string Adress { get; set; }
 
         public virtual User IdNavigation { get; set; }
         public virtual ICollection<GroupSubject> GroupSubjects { get; set; }

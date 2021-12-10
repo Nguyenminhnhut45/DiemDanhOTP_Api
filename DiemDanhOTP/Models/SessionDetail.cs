@@ -13,6 +13,7 @@ namespace DiemDanhOTP.Models
         public DateTime? Time { get; set; }
         public string Note { get; set; }
         public string Otp { get; set; }
+        public string ViTri { get; set; }
 
         public virtual Session IdlessionNavigation { get; set; }
         public virtual Student IdstuddentNavigation { get; set; }

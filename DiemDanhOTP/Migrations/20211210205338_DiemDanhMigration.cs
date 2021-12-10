@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DiemDanhOTP.Migrations
 {
-    public partial class DiemDanhOTPMigration : Migration
+    public partial class DiemDanhMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -92,7 +92,9 @@ namespace DiemDanhOTP.Migrations
                     Phone = table.Column<string>(type: "varchar(15)", unicode: false, maxLength: 15, nullable: true),
                     Birthday = table.Column<DateTime>(type: "date", nullable: true),
                     ID = table.Column<int>(type: "int", nullable: true),
-                    SourceTeacher = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: true)
+                    SourceTeacher = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: true),
+                    Gmail = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
+                    Adress = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -113,11 +115,13 @@ namespace DiemDanhOTP.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IDCourse = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: true),
                     IDTeacher = table.Column<int>(type: "int", nullable: true),
-                    Class = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: true),
+                    ClassGroup = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: true),
                     DateStart = table.Column<DateTime>(type: "date", nullable: true),
                     DateEnd = table.Column<DateTime>(type: "date", nullable: true),
                     Semester = table.Column<byte>(type: "tinyint", nullable: true),
-                    Year = table.Column<int>(type: "int", nullable: true)
+                    Year = table.Column<int>(type: "int", nullable: true),
+                    Linkds = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true),
+                    Linkaddsr = table.Column<string>(type: "varchar(max)", unicode: false, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -191,10 +195,11 @@ namespace DiemDanhOTP.Migrations
                 {
                     IDLession = table.Column<int>(type: "int", nullable: false),
                     IDStuddent = table.Column<string>(type: "varchar(10)", unicode: false, maxLength: 10, nullable: false),
-                    Status = table.Column<string>(type: "char(1)", unicode: false, fixedLength: true, maxLength: 1, nullable: false),
+                    Status = table.Column<string>(type: "char(1)", unicode: false, fixedLength: true, maxLength: 1, nullable: true),
                     Time = table.Column<DateTime>(type: "datetime", nullable: true),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OTP = table.Column<string>(type: "varchar(6)", unicode: false, maxLength: 6, nullable: true)
+                    OTP = table.Column<string>(type: "varchar(6)", unicode: false, maxLength: 6, nullable: true),
+                    ViTri = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

@@ -78,10 +78,10 @@ namespace DiemDanhOTP.Migrations
                         .HasColumnName("IDGroup")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Class")
-                        .HasMaxLength(10)
+                    b.Property<string>("ClassGroup")
+                        .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(10)");
+                        .HasColumnType("varchar(20)");
 
                     b.Property<DateTime?>("DateEnd")
                         .HasColumnType("date");
@@ -98,6 +98,14 @@ namespace DiemDanhOTP.Migrations
                     b.Property<int?>("Idteacher")
                         .HasColumnType("int")
                         .HasColumnName("IDTeacher");
+
+                    b.Property<string>("Linkaddsr")
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
+
+                    b.Property<string>("Linkds")
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
 
                     b.Property<byte?>("Semester")
                         .HasColumnType("tinyint");
@@ -177,7 +185,6 @@ namespace DiemDanhOTP.Migrations
                         .HasColumnName("OTP");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasMaxLength(1)
                         .IsUnicode(false)
                         .HasColumnType("char(1)")
@@ -185,6 +192,9 @@ namespace DiemDanhOTP.Migrations
 
                     b.Property<DateTime?>("Time")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("ViTri")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Idlession", "Idstuddent");
 
@@ -269,8 +279,15 @@ namespace DiemDanhOTP.Migrations
                         .HasColumnName("IDTeacher")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Adress")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("Birthday")
                         .HasColumnType("date");
+
+                    b.Property<string>("Gmail")
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
 
                     b.Property<int?>("Id")
                         .HasColumnType("int")
