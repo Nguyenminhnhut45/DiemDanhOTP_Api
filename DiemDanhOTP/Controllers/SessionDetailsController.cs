@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -28,12 +29,68 @@ namespace DiemDanhOTP.Controllers
 
         // GET api/<SessionDetailsController>/5
 
+
+        [HttpGet("/api/SessionDetail/Date/{date}/{idStudent}")]
+        public async Task<IActionResult> GetByDate(string date, string idStudent)
+        {
+            int status = 0;
+            var list = new List<SessionDetail>();
+            var logs = from SessionDetail in _context.SessionDetails.Include(x => x.IdlessionNavigation) select SessionDetail;
+            logs = logs.Where(p => p.Idstuddent == idStudent);
+            logs.ToList().ForEach(log =>
+            {
+                String datee = String.Format("{0:yyyy-MM-dd}", log.Time);
+               if(date == datee)
+                {
+                    list.Add(log);
+                    status++;
+                }
+
+            });
+          
+            return Ok(new { data = status, list = list });
+        }
+
         //GET api
         [HttpGet("{idstudent}/{idsession}")]
         public SessionDetail GetByIdStudentIdSession(string idstudent, int idsession)
         {
             return _context.SessionDetails.SingleOrDefault(x => x.Idlession == idsession && x.Idstuddent == idstudent);
         }
+
+
+        [HttpGet("api/SessionDetail/{idsession}/{status}")]
+        public async Task<IActionResult> GetStudent(int idsession, string status)
+        {
+
+            int count = 0;
+            var logs = from SessionDetail in _context.SessionDetails.Include(x => x.IdstuddentNavigation) select SessionDetail;
+            logs = logs.Where(p => p.Idlession == idsession && p.Status.Equals(status));
+            logs.ToList().ForEach(log => count++);
+
+            return Ok(new { quantity = count, data = logs });
+        }
+
+        [HttpGet("api/{idsession}/{idStudent}")]
+        public async Task<IActionResult> GetQuantityAbsent(int idsession, string idStudent)
+        {
+            int status = 0;
+            var session = _context.SessionDetails.SingleOrDefault(x => x.Idlession == idsession && x.Idstuddent == idStudent);
+            if (session != null)
+            {
+                if (session.Status.Equals("1")) { status = 1; }
+                else status = 0;
+            }
+            else
+            {
+                status = 0;
+                session = null;
+
+            }
+
+            return Ok(new { result = status, data = session });
+        }
+
 
         [HttpGet("{idsession}")]
         public IEnumerable<SessionDetail> GetByIdIdSession(int idsession)

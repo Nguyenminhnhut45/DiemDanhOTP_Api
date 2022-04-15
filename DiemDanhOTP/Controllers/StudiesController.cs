@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace DiemDanhOTP.Controllers
@@ -24,7 +25,7 @@ namespace DiemDanhOTP.Controllers
         {
             return _context.Studies.Include(x => x.IdgroupNavigation).Include(x => x.IdstudentNavigation);
         }
-
+        
         // GET api/<StudysController>/5
         [HttpGet("{mssv}")]
         public Study GetByMssv(string mssv)
@@ -48,6 +49,16 @@ namespace DiemDanhOTP.Controllers
             return logs;
         }
 
+        [HttpGet("QuantityStudent/{idGroup}")]
+        public async Task<IActionResult> getQuantity(int idGroup)
+        {
+            int count = 0;
+            var logs = from Study in _context.Studies.Include(x=> x.IdstudentNavigation) select Study;
+            logs = logs.Where(p => p.Idgroup == idGroup);
+            logs.ToList().ForEach(log =>  count++);
+
+            return Ok(new { data=count, list=logs});
+        }
         // POST api/<StudysController>
         [HttpPost]
         public void Post([FromBody] Study study)

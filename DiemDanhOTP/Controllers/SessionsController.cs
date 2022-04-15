@@ -43,13 +43,34 @@ namespace DiemDanhOTP.Controllers
         }
 
         //Get api by groupsubject 
-        [HttpGet("/api/Sessions/Group/{id}")]
-        public IEnumerable<Session> GetByIdGroup(int id)
+        [HttpGet("/api/Sessions/Group/{id}/{idStudent}")]
+
+        public async Task<IActionResult> GetByIdGroup(int id, string idStudent)
         {
-            var logs = from Session in _context.Sessions.Include(x => x.IdgroupNavigation) select Session;
+            int count = 0;
+            int yes = 0;
+            var lsSessionDetail = new List<SessionDetail>();
+            var logs = from Session in _context.Sessions select Session;
             logs = logs.Where(p => p.Idgroup == id);
-            return logs;
+            logs.ToList().ForEach(log => count++);
+            logs.ToList().ForEach(log =>
+            {
+                var status = _context.SessionDetails.SingleOrDefault(x => x.Idlession == log.Idsession && x.Idstuddent == idStudent);
+                lsSessionDetail.Add(status);
+                if (status != null)
+                {
+                    if (status.Status.Equals("1"))
+                    {
+                        yes++;
+                    }
+                }
+                
+            });
+            //return Ok(new { quantitySession = count, yes = yes, list = logs, listSessionDetail = lsSessionDetail });
+
+            return Ok(new { quantitySession = count,yes =yes, listSessionDetail =lsSessionDetail });
         }
+
         [HttpGet("/api/Session/Date/{date}")]
         public IEnumerable<Session> GetByDate(string date)
         {
@@ -72,6 +93,7 @@ namespace DiemDanhOTP.Controllers
         [HttpGet("/api/Session/{idSession}")]
         public async Task<IActionResult> SessionSend(int idSession)
         {
+            int count = 0;
             string[] saAllowedCharacters = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" };
             var session = _context.Sessions.FirstOrDefault(x => x.Idsession == idSession);
             if (session == null)
@@ -80,13 +102,38 @@ namespace DiemDanhOTP.Controllers
             }
             List<string> students = new List<string>();
             var users = new List<Student>();
-            var logs = from Study in _context.Studies select Study;
+            var logs = from Study in _context.Studies.Include(x => x.IdstudentNavigation) select Study;
             logs = logs.Where(p => p.Idgroup == session.Idgroup);//Loc studies theo idgroup
 
 
             logs.ToList().ForEach(log => students.Add(log.Idstudent));//Add nhung id thuoc log vao students
+            /*logs.ToList().ForEach(log =>
+            {
+                string otp = GenerateRandomOTP(6, saAllowedCharacters);
+                DateTime date = DateTime.UtcNow.AddHours(7);
+                SendMail(log.IdstudentNavigation.FullName, log.IdstudentNavigation.Email, otp, date);
+
+                int id = idSession;
+                string idStudent = log.Idstudent;
+                string otps = otp;
+                DateTime dateTime = date;
+
+                SessionDetail sessionDetail = new SessionDetail()
+                {
+                    Idlession = id,
+                    Idstuddent = idStudent,
+                    Otp = otp,
+                    Time = dateTime,
+                    Status = "0"
+
+                };
+                _context.Add(sessionDetail);
+                _context.SaveChanges();
+                count++;
+            });*///Add nhung id thuoc log vao students
+
+
             var st = from Student in _context.Students select Student;
-            int count = 0;
             foreach (var s in students)
             {
                 var n = _context.Students.FirstOrDefault(x => x.Idstudent == s);
@@ -120,8 +167,9 @@ namespace DiemDanhOTP.Controllers
                 };
                 _context.Add(sessionDetail);
                 _context.SaveChanges();
+                count++;
             }
-            return StatusCode(201);
+            return Ok(new { StatusCode = true, quantity = count });
         }
 
 
@@ -138,7 +186,7 @@ namespace DiemDanhOTP.Controllers
                 message.Subject = "ĐIỂM DANH HUTECH";
 
                 var bodyBuilder = new BodyBuilder();
-                bodyBuilder.HtmlBody = "<p>Sử dụng mã xác minh " + "" + otp + " để xác thực điểm danh. <br>Mã sử dụng trong vòng <a color=red>60s!</a>!"
+                bodyBuilder.HtmlBody = "<p>Sử dụng mã xác minh " + "" + otp + " để xác thực điểm danh cho " + name + ". <br>Mã sử dụng trong vòng <a color=red>60s!</a>!"
                     + dateTime.ToString("<br>dddd, MMMM d, yyyy hh:mm:ss") + "</p>";
                 message.Body = bodyBuilder.ToMessageBody();
                 client.Connect("smtp.gmail.com", 465, SecureSocketOptions.SslOnConnect);

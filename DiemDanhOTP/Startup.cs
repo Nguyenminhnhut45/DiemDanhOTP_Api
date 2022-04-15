@@ -49,7 +49,7 @@ namespace DiemDanhOTP
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "DiemDanhOTP v1");
-               c.RoutePrefix = string.Empty;
+             // c.RoutePrefix = string.Empty;
             });
 
 
@@ -70,13 +70,7 @@ namespace DiemDanhOTP
                 endpoints.MapControllers();
             });
 
-            /*app.UseEndpoints(area =>
-            {
-                area.MapControllerRoute(
-                  name: "areas",
-                  pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
-                );
-            });*/
+          
 
         }
     }
